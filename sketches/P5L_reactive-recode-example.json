@@ -1,0 +1,16 @@
+{
+  "version": "1.4.1",
+  "revision": 44,
+  "count": {
+    "sketches": 1,
+    "folders": 0
+  },
+  "structure": [
+    {
+      "name": "reactive-recode-template",
+      "mod": 1641259741410,
+      "type": "sketch",
+      "code": "let credits = { \n    \"student_names\": \"ex.ample + exam.ple\", \n    \"recode_id\": \"zotero2-2604593.KNUWATX8\", \n    \"recode_timestamp\": 0, \n    \"recode_designer\": \"Pierre Jost\", \n    \"recode_title\": \"H2O_Wasserglas\", \n    \"recode_year\": 1970 \n} \n\nfunction setup() {\n\tcreateCanvas(windowWidth, windowHeight);\n\tfill(255);\n\tsetupAudio();\n}\n\nfunction draw() {\n\tupdateAudio();\n\tbackground(0, 10);\n\t\n\ttextSize(150 + ampEase);\n\ttextAlign(CENTER, CENTER)\n\ttranslate(width/2, height / 2)\n\trotate(radians(frameCount/2))\n\ttext(\"example\", 0, 0)\n\n}\n\n/* AUDIO INIT */\nlet mic, fftRaw, fft = [],\n\twaveform = [],\n\tamp = 0.0,\n\tampStereo = {\n\t\tl: 0.0,\n\t\tr: 0.0\n\t},\n\tampEase = 0.0,\n\tnumBins = 512,\n\tbands = 12;\n\nfunction setupAudio() {\n\tuserStartAudio();\n\tmic = new p5.AudioIn();\n\tmic.start();\n\tfftRaw = new p5.FFT(0.75, numBins);\n\tfftRaw.setInput(mic);\n}\n\nfunction updateAudio() {\n\tfftRaw.analyze();\n\tamp = mic.getLevel() * 1000; // average mixed amplitude\n\tampStereo.l = mic.amplitude.getLevel(0) * 500; // average left amplitude\n\tampStereo.r = mic.amplitude.getLevel(1) * 500; // average right amplitude\n\tampEase = ease(amp, ampEase, 0.075); // smooth 'amp'\n\twaveform = fftRaw.waveform(); // array (-1, 1)\n\tfft = fftRaw.logAverages(fftRaw.getOctaveBands(bands)); // array (0, 255)\n}"
+    }
+  ]
+}
