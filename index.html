@@ -690,8 +690,13 @@ function println(msg){
 					v.path = r.poster.uri.replace('mediaserver:', '')
 					v.details = 'https://mediathek.hgk.fhnw.ch/amp/detail/' + v.id
 					v.poster =  v.mediaserver + v.path + '/resize/size320x180/formatJPEG'
+
+					// *** overwrite auto with selected scene
+					v.poster = 'sketches/'+sketches[i].fileName+'.jpg'
+
 					v.video = v.mediaserver + v.path.replace('timeshot$$3', 'web/master/')
 					v.vidPlay = `vidPlay(this, \'${v.poster}\',\'${v.video}\');`
+
 
 				let sketchBG = 'background-image:url(\''+v.poster+'\');';
 				let sHTML = '<div class="p5-info-sketch" id="sketch_'+i+'" style="'+sketchBG+'" onclick="loadSketch('+i+')">';
