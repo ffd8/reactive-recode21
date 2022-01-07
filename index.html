@@ -27,6 +27,9 @@
 
 
 
+
+
+
 	<!-- Style -->
 	<link rel="stylesheet" type="text/css" media="all" href="style.css?8">
 	<style type="text/css">
@@ -35,7 +38,7 @@
 		}
 		#p5-info, #p5-info-bg{
 			position:fixed;
-			z-index:9999;
+			z-index:10;
 			width:100vw;
 			height:100vh;
 			box-sizing: border-box;
@@ -48,7 +51,7 @@
 		.p5-top{
 			position:fixed;
 			width:250px;
-			z-index:999;
+			z-index:11;
 			/*background:#000;*/
 		}
 		.scroll_content{
@@ -57,6 +60,7 @@
 			width:250px;
 			height:calc(100vh - 100px);
 			overflow:auto;
+			padding-right: 20px;
 		}
 		.p5-header{
 			font-size:30pt;
@@ -65,14 +69,14 @@
 			color:#fff;
 			font-weight:400;
 			mix-blend-mode: difference;
-			-webkit-text-stroke-width: 1px;
+			-webkit-text-stroke-width: 0px;
    			-webkit-text-stroke-color: black;
 		}
 		#p5-showinfo{
 			position:fixed;
 			top:0;
 			left:0;
-			z-index:9999;
+			z-index:10;
 			color:#fff;
 			padding:5px;
 			opacity:.5;
@@ -87,7 +91,7 @@
 			left:0;
 			width:250px;
 			height:100vh;
-			z-index:9999;
+			z-index:10;
 			font-size:10pt;
 			color:#fff;
 			text-align:left;
@@ -115,7 +119,7 @@
 			position:fixed;
 			left:250px;
 			height:100vh;
-			z-index:9999;
+			z-index:10;
 			overflow:hidden;
 			border:none;
 			padding:10px;
@@ -127,7 +131,7 @@
 		}
 		#p5-buttons{
 			position:fixed;
-			z-index:9999;
+			z-index:10;
 			top:5px;
 			right:0px;
 		}
@@ -142,7 +146,8 @@
 			cursor:pointer;
 			float:left;
 			margin-right:10px;
-			background:#000;
+			background:#444;
+			border-radius: 5px;
 		}
 		.p5-button:hover{
 			opacity: 1;
@@ -156,6 +161,7 @@
 			/*overflow-y:auto;*/
 		}
 		.p5-info-sketch{
+			position: relative;
 			margin: 5px 0 5px 0;
 			width:100%;
 			height:auto;
@@ -165,6 +171,7 @@
 			background-position: center;
 			opacity:.8;
 			cursor:pointer;
+			border-top: 1px solid #fff;
 		}
 		.p5-info-sketch:hover{
 			opacity: 1;
@@ -199,11 +206,24 @@
 			font-size:8pt;
 			font-weight:400;
 		}
+		.subhead svg{
+			height: 1.5em;
+			margin-bottom: -2px;
+			opacity: .8;
+		}
+		.subhead svg:hover{
+			opacity: 1;
+		}
+		.subclose{
+			position: absolute;
+			top: 2px;
+			right: 5px;
+		}
 		#p5-info-bg{
 			position:fixed;
 			top:0;
 			left:0;
-			z-index:9998;
+			z-index:9;
 			background:#000;
 			opacity:1;
 			padding:0px;
@@ -213,8 +233,52 @@
 			text-decoration: underline;
 			cursor:pointer;
 		}
-		#vid{
+		.vid{
 			width: 100%;
+			position: relative;
+		}
+		#vidplayer{
+			position: fixed;
+			z-index: 11;
+			left: 0;
+			top: 0;
+			width: 100vw;
+			height: 100vh;
+			background: rgba(15, 15, 15, .9);
+			text-align: center;
+			display: none;
+		}
+		#vid{
+			margin-top: 2%;
+			height: 95%;
+			width: 90%;
+		}
+		#vidclose{
+			position: absolute;
+			right: 0px;
+			top: 0px;
+			font-size: 30pt;
+			color: #fff;
+			cursor: pointer;
+			opacity: .8;
+			line-height: .7em;
+			padding: 5px;
+		}
+		#vidclose:hover{
+			opacity: 1;
+		}
+		.vidplay svg{
+			margin-top: 20%;
+			height: 50%;
+		}
+		.vidplay{
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			opacity: .8;
+			pointer-events: none;
 		}
 
 		/*drag+drop support*/
@@ -224,7 +288,7 @@
 			height:100vh;
 			opacity:.5;
 			background:#00ff00;
-			z-index:99999;
+			z-index:11;
 			display:none;
 			pointer-events: none;
 		}
@@ -235,6 +299,11 @@
 	<script src="includes/js/loopBreaker.min.js"></script>
 </head>
 <body>
+	<div id="vidplayer" onclick="vidStop()">
+		<!-- place vid in right spot, height 90%, x for closing.. or anywhere on div..slac -->
+		<div id="vidclose" onclick="vidStop()">x</div>
+		<div id="vid"></div>
+	</div>
 	<div id="p5-drop"> </div>
 
 	<div id="loader">
@@ -260,31 +329,33 @@
 						<br><span onclick="toggleInfo();">(click to hide / CTRL + E)</span>
 					</div>
 
-					<div class="scroll_content scroller" >
+					<div id="scroll-content" class="scroll_content scroller" >
 						BA21 EDITION<br>
 						INTRO INTERACTION I<br>
 						BA 1ST YEAR, FALL 2021<br>
-						<a href="http://thebaselschoolofdesign.ch/" target="_blank">Institute Digital <br>Communication Environments <br>IDCE HGK FHNW</a><br>
+						<a href="https://www.fhnw.ch/en/about-fhnw/schools/academy-of-art-and-design/institute-digital-communication-environments" target="_blank">INSTITUTE DIGITAL <br>COMMUNICATION ENVIRONMENTS <br>IDCE HGK FHNW</a><br>
 						LECTURER: <a href="https://teddavis.org" target="_blank">TED DAVIS</a><br><br>
 						Recoding moments from the <br>
 						<a href="https://filmdesign.glitch.me" target="_blank">FILM + DESIGN</a> collection as inspiration for audio-reactive visuals.<br>
-						Coded with <a href="https://p5js.org/" target="_blank">p5.js</a> via <a href="https://p5live.org" target="_blank">P5LIVE</a>.
+						Coded with <a href="https://p5js.org/" target="_blank">p5.js</a> via <a href="https://p5live.org" target="_blank">P5LIVE</a>.<br><br>
+						<span style="font-style:italic;">* Warning, some sketches contain strong flickering *</span>
 						<br><br>
 						<a id="moreinfo" onclick="showmore();">Read more...</a>
 						<br><br>
 						<div id="moreinfo-contents" style="display:none;">
 							Playground<br>
 							----------<br>
-							All sketches are remixable. Feel free to change the code (it will auto-compile if bug-free, otherwise press 'RECOMPILE' in upper right). The changes are only temporary and reset upon changing sketches. If you want to keep playing with a sketch, just copy and paste into <a href="https://p5live.org">P5LIVE</a> to save changes.<br><br>
+							All sketches are remixable! Edit the code, which auto-compiles if bug-free, or press 'RECOMPILE' in upper right. Changes are temporary and reset when changing sketches. If you want to keep playing with a sketch, copy and paste it into <a href="https://p5live.org">P5LIVE</a> to save changes.<br><br>
 
-							Shortcuts:<br>
+							Shortcuts<br>
+							----------<br>
 							CTRL + ENTER » Recompile<br>
-							CTRL + E » Toggle menu
+							CTRL + E     » Toggle menu
 							<br><br>
 
 							Background<br>
 							----------<br>
-							...pending<br><br>
+							After selecting an inspiring <a href="https://filmdesign.glitch.me" target="_blank">FILM + DESIGN</a> work, students began to recode it (an hommage not duplicate) with <a href="http://p5js.org" target="_blank">p5.js</a>. Compared to previous editions, this one offered the extra challenge of time-based design to consider. Students explored new programming concepts and <a href="http://p5js.org/reference/" target="_blank">functions</a>, led by their source material. All the while investigating today's possibilities of real-time generative graphics in the web browser with audio and GUI as a primary input for interaction.<br><br>
 
 							Previous editions<br>
 							<a href="https://reactiverecode-ba20.glitch.me/" target="_blank">2020, Reactive-Recode-20</a><br>
@@ -367,7 +438,6 @@ function println(msg){
 			PRIORITY
 			------------
 			- drag + drop code for testing
-			- finish hotswap of video/image
 			-
 
 
@@ -378,6 +448,34 @@ function println(msg){
 		*/
 
 		'use strict'
+
+		let vidContainer = document.getElementById('vidplayer')
+		let vidPlayer = document.getElementById('vid')
+		let vid
+
+		function vidPlay(poster, vid, curTime = 0){
+			let vidHTML = `
+			<video playsinline webkit-playsinline controls poster="${poster}" style="height:95%;" onclick="event.stopPropagation();">
+			  <source src="${vid}" type="video/mp4">
+			  Your browser does not support the video tag.
+			</video>`
+
+			vidContainer.style.display = 'block'
+			vidPlayer.innerHTML = vidHTML
+			vid = vidPlayer.querySelector('video')
+			vid.addEventListener('loadeddata', (event) => {
+			  vid.currentTime = curTime;
+			  vid.play()
+			});
+		}
+
+		function vidStop(){
+			if(vid != undefined){
+				vid.stop()
+			}
+			vidContainer.style.display = 'none'
+		}
+
 
 		/* INIT */
 		let currentRevision = 37;
@@ -452,8 +550,9 @@ function println(msg){
 			tabSize: 4, useSoftTabs: false,
 
 		});
+		editor.getSession().setUseWorker(false);
 		p5editor.style.visibility = 'visible';
-		p5code.style.fontSize = '15pt';
+		p5code.style.fontSize = '12pt';
 
 		/* CMD-KEYS (remove key conflicts) */
 		editor.commands.removeCommands(['gotoright','movelinesup', 'movelinesdown', 'gotolinestart', 'splitline', 'gotolineend', 'golineup', 'jumptomatching', 'golinedown', 'transposeletters', 'find']);
@@ -677,11 +776,10 @@ function println(msg){
 				sketches.push(s);
 			}
 
-			sketches = sketches.sort( compare ); // unsure about years.. *** shuffle instead?
-			// sketches.unshift(ts);
+			// sketches = sketches.sort( compare ); // no more need, shuffled below
 
 
-			let sketchesHTML = '';
+			let sketchesHTML = [];
 			for(var i=1; i < sketches.length; i++){
 				let r = JSONsearch(sketches[i].credits.recode_id, filmdesign)
 				let v = {}
@@ -690,32 +788,45 @@ function println(msg){
 					v.path = r.poster.uri.replace('mediaserver:', '')
 					v.details = 'https://mediathek.hgk.fhnw.ch/amp/detail/' + v.id
 					v.poster =  v.mediaserver + v.path + '/resize/size320x180/formatJPEG'
+					v.database = 'https://mediathek.hgk.fhnw.ch/amp/detail/' + v.id
 
-					// *** overwrite auto with selected scene
-					v.poster = 'sketches/'+sketches[i].fileName+'.jpg'
+					// *** overwrite database poster with thumb if provided
+					let thumbPath = 'sketches/'+sketches[i].fileName+'.jpg'
+					fileExists(thumbPath).then(function(exists){
+						if(exists){
+							let projectBG = document.getElementById(`sketch_${this[0]}`)
+							let projectPoster = document.getElementById(`poster_${this[0]}`)
+							// v.poster = thumbPath
+							projectBG.style.backgroundImage = `url(${this[1]})`
+							projectPoster.src = this[1]
+						}
+					}.bind([i, thumbPath]));
 
 					v.video = v.mediaserver + v.path.replace('timeshot$$3', 'web/master/')
-					v.vidPlay = `vidPlay(this, \'${v.poster}\',\'${v.video}\');`
+					v.vidPlay = `vidPlay(\'${v.poster}\',\'${v.video}\', ${sketches[i].credits.recode_timestamp});`
 
 
 				let sketchBG = 'background-image:url(\''+v.poster+'\');';
 				let sHTML = '<div class="p5-info-sketch" id="sketch_'+i+'" style="'+sketchBG+'" onclick="loadSketch('+i+')">';
 					if(i > 0){
 						sHTML += '<div class="sketch-details">';
-						sHTML += '<div class="subhead">RECODE STUDENTS</div>'+sketches[i].credits.student_names+'<br>';
-						sHTML += '<div class="subhead">TITLE</div>'+sketches[i].credits.recode_title+'<br>';
-						sHTML += '<div class="subhead">DESIGNER</div>'+sketches[i].credits.recode_designer+'<br>';
-						sHTML += '<div class="subhead">YEAR</div>'+sketches[i].credits.recode_year+'<br>';
-						sHTML += '<div class="subhead">ORIGINAL</div><div class="vid"><img class="sketch-image" src="'+v.poster+'" onclick="'+v.vidPlay+'event.stopPropagation();"></div>';
+						sHTML += '<div class="subhead">RECODE STUDENTS</div><span onclick="event.stopPropagation();">'+sketches[i].credits.student_names+'</span><br>';
+						sHTML += '<div class="subhead">TITLE</div><span onclick="event.stopPropagation();">'+sketches[i].credits.recode_title+'</span><br>';
+						sHTML += '<div class="subhead">DESIGNER</div><span onclick="event.stopPropagation();">'+sketches[i].credits.recode_designer+'</span><br>';
+						sHTML += '<div class="subhead">YEAR</div><span onclick="event.stopPropagation();">'+sketches[i].credits.recode_year+'</span><br>';
+						sHTML += '<div class="subhead">ORIGINAL <a href="'+v.database+'" target="_blank_" onclick="event.stopPropagation();"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-database"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg></a></div><div class="vid"><img id="poster_'+i+'" class="sketch-image" src="'+v.poster+'" onclick="'+v.vidPlay+'event.stopPropagation();"><div class="vidplay"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></div></div>';
+						sHTML += '<div class="subclose">x</div>';
 						sHTML += '</div>';
 					}
 					sHTML += '</div>';
-					sketchesHTML += sHTML;
+					sketchesHTML.push(sHTML);
 			}
-			document.getElementById('p5-info-sketches').innerHTML = sketchesHTML;
+
+			sketchesHTML = shuffle(sketchesHTML)
+			document.getElementById('p5-info-sketches').innerHTML = sketchesHTML.join('');
 		}
 
-		// function loadSketches(initList){
+		// function sketchesHTML(initList){
 		// 	if(initList){
 		// 		document.getElementById('p5-info-sketches').innerHTML = "";
 		// 		sketches = [];
@@ -763,21 +874,29 @@ function println(msg){
 
 		// }
 
-		function vidPlay(elm, poster, vid){
-			console.log(elm.onclick)
-			let vidHTML = `
-			<video playsinline webkit-playsinline controls poster="${poster}" style="width:100%;" onclick="event.stopPropagation();">
-			  <source src="${vid}" type="video/mp4">
-			  Your browser does not support the video tag.
-			</video>`
-			let par = elm.parentNode
-			par.innerHTML = vidHTML
-			par.querySelector('video').play()
+		function shuffle(array) {
+		  let currentIndex = array.length,  randomIndex;
+
+		  // While there remain elements to shuffle...
+		  while (currentIndex != 0) {
+
+		    // Pick a remaining element...
+		    randomIndex = Math.floor(Math.random() * currentIndex);
+		    currentIndex--;
+
+		    // And swap it with the current element.
+		    [array[currentIndex], array[randomIndex]] = [
+		      array[randomIndex], array[currentIndex]];
+		  }
+
+		  return array;
 		}
 
-		function vidStop(){
-			// .. return vid to image on collapse..
-		}
+
+		const fileExists = file =>
+		  fetch(file, {method: 'HEAD', cache: 'no-store'})
+		  .then(response => response.status==200);
+
 
 		function tidyCode(){
 			var tempCode = js_beautify(editor.getValue(), beautifyOptions);
@@ -820,6 +939,17 @@ function println(msg){
 				}
 				if(sketch > 0){
 					document.getElementById('sketch_'+sketch).classList.add("p5-info-sketch-sel");
+
+					// *** add autoscroll to make sure whole sketch info visible
+					// let sketchesView = document.getElementById('scroll-content')
+					// console.log(sketchesView)
+					// let sketchesTop = sketchesView.scrollTop()
+					// sketchesView.scrollTop(sketchesTop + 150)
+					 // sketchesView.scroll({
+			   //          top: sketchesView.scrollTop + 150,
+			   //          left: 0,
+			   //          behavior: 'smooth'
+			   //      });
 				}
 
 				// *** disable print()
@@ -1213,7 +1343,7 @@ function println(msg){
 			// if(!settings.cocoding.active){
 			// 	localStorage[settings.fileName] = editor.getValue();
 			// }
-			// checkErrors();	// ** maybe turn back on>?
+			checkErrors();	// ** maybe turn back on>?
 		};
 
 		function checkErrors(){
@@ -1574,6 +1704,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
             let code = JSON.parse(e.target.result).structure[0].code;
             // console.log(p)
             editor.setValue(code)
+            setTimeout(function(){recompile()}, 200)
             // var span = document.createElement('span');
             // span.innerHTML = p[Object.keys(p)[0]];
             // document.getElementById('div').insertBefore(span, null);
@@ -1602,81 +1733,5 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
 
 
 	</script>
-
-	<!-- <script type="text/javascript" src="includes/js/dropzone.js"></script>
-	<script type="text/javascript">
-		//var myDropzone = new Dropzone("#p5-frame-cover", { url: "../upload/upload.php"});
-		var divDrop = document.getElementById('p5-drop');
-		var warned = false;
-
-		var dz = new Dropzone(document.body, {
-		  // autoProcessQueue: false,
-		  url: "blah.php",
-		  clickable: false,
-		  maxFiles: 1,
-		  acceptedFiles:'.json',
-		  init: function() {
-		    this.on("success", function(file, responseText) {
-		    	console.log(file)
-		    	// if(responseText === 'uploaded!'){
-		    	// 	// editor.setValue('// UPLOADED!'+'\n\n'+p5liveWelcomeMsg, 1);
-		    	// 	loadSketches(true);
-		    	// }else{
-		    	// 	// editor.setValue('// ERROR: '+responseText +'\n\n'+p5liveWelcomeMsg, 1);
-		    	// }
-
-		    	this.removeFile(file);
-		    	divDrop.style.display = "none";
-		    });
-		    this.on("dragenter", function(file, responseText) {
-		    	divDrop.style.display = "block";
-		    	warned = false;
-		    });
-		    this.on("dragleave", function(file, responseText) {
-		    	divDrop.style.display = "none";
-		    });
-		    this.on("drop", function(file, responseText) {
-		    	// editor.setValue('// UPLOADING...\n\n'+p5liveWelcomeMsg, 1);
-		    	divDrop.style.display = "none";
-		    	console.log(file)
-		    	// reader.readAsText(file);
-		    	// var reader = new FileReader();
-			    //     var dz = this;
-			    //     reader.addEventListener("loadend", function(event) {
-			    //         console.log(event.target.result);
-			    //         file.status = Dropzone.SUCCESS;
-			    //         dz.emit("success", file);
-			    //         dz.emit("complete", file);
-			    //     });
-			    //     reader.readAsText(file);
-		    });
-		    this.on('accept', function(file, responseText){
-			        // var reader = new FileReader();
-			        // var dz = this;
-			        // reader.addEventListener("loadend", function(event) {
-			        //     console.log(event.target.result);
-			        //     file.status = Dropzone.SUCCESS;
-			        //     dz.emit("success", file);
-			        //     dz.emit("complete", file);
-			        // });
-			        // reader.readAsText(file);
-		    })
-		    this.on("dragover", function(file, responseText) {
-		    	divDrop.style.display = "block";
-		    });
-		    this.on("error", function(file, responseText) {
-		    	editor.setValue('// ERROR: '+responseText +'\n\n'+p5liveWelcomeMsg, 1);
-		    	if(!warned){
-		    		// alert('Warning: only first 5 files were uploaded.');
-		     		// warned = true;
-		  		}
-		    	this.removeFile(file);
-		    });
-		  },
-
-
-
-		});
-	</script> -->
 </body>
 </html>
