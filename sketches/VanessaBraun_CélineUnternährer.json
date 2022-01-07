@@ -1,0 +1,17 @@
+{
+  "version": "1.4.1",
+  "revision": 44,
+  "count": {
+    "sketches": 1,
+    "folders": 0
+  },
+  "structure": [
+    {
+      "type": "sketch",
+      "name": "VanessaBraun_CélineUnternährer",
+      "mod": 1641565721587,
+      "parent": "cc_hgk13_20220107",
+      "code": "let credits = {\n\t\"student_names\": \"Vanessa Braun, Céline Unternährer\",\n\t\"recode_id\": \"zotero2-2604593.XVY7CHHP\",\n\t\"recode_timestamp\": 10,\n\t\"recode_title\": \"LUX\",\n\t\"recode_designer\": \"Frederick Burbach\",\n\t\"recode_year\": 1982\n}\n\n// let checkboxBold\n\nlet sliderSpeed, rot = 0, rotSpecial = 0;\nlet sliderStroke, weight = 20\n\nlet flip = true\nlet flipSpeed = 20 // bigger = slower\n\nfunction setup() {\n\tcreateCanvas(windowWidth, windowHeight)\n\tangleMode(DEGREES)\n\n\tsliderSpeed = createSlider(0, 100, 1, 1)\n\t//sliderSpeed = createSlider(5, 200, 50, 1)\t// (min, max, start, Schritte) Drehgeschw. = rotSpeed?\n\tsliderSpeed.position(width/3, 20)\n\n\tsliderFlip = createSlider (0, 100, 50, 1)\n\tsliderFlip.position(width/2,20)\n\t\n\tsliderStroke = createSlider(0, 100, 50, 1)\n\tsliderStroke.position(width/6, 20)\n\t\n\t// checkboxBold = createCheckbox(\"bold\", false)\n\t// checkboxBold.position(width/4, 20)\n\t// checkboxBold.style(\"color\", \"#f64f9e\")\n\t// checkboxBold.style(\"font-family\", \"sans-serif\")\n\n\n}\n\nfunction draw() {\n\t\n\tif(frameCount % flipSpeed == 0) { // flipSpeed should be slider.value()\n\t\tflip = !flip\n\t}\n\t\n\t\n\n\n\ttranslate(width / 2, height / 2)\n\ttextSize(200)\n\ttextAlign(CENTER, CENTER)\n\n\tif(flip){\n\t\tbackground(0)\n\t\tfill(255)\n\t\tstroke(255)\n\t\trotSpecial = 0\n\t}else{\n\t\tbackground(255)\n\t\tfill(0)\n\t\tstroke(0)\n\t\trotSpecial = 0 // extra rotation for one\n\t}\n\n\n\t//rotate(rotSpeed)\n\t//weight(sliderStroke.value + weight) // extra thickness\n\trotate(rot + rotSpecial)\n\ttextSize(200)\n\t//textStyle(NORMAL)\n\ttextAlign(CENTER, CENTER)\n\ttext('LUX', 0, 0)\n\n\t//weight += sliderStroke.value()\n\trot += sliderSpeed.value()\n\t//change += flipSpeed.value\n\t\n\t//setTimeout(whiteBack, 1000);\n\n\t// setInterval(whiteBack, 2000);\n\n\tfunction whiteBack() {\n\t\tbackground(255)\n\tfill(0)\n\ttranslate(0, 0)\n\t\t//rotate(rotSpeed)\n\t\t//textStyle(NORMAL)\n\t\ttext('LUX', 0, 0)\n\n\t }\n\n\t//stopAnimation()\n\n}"
+    }
+  ]
+}
